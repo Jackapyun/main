@@ -1,17 +1,8 @@
 {
-  "cmake.configureOnOpen": false,
-  "cmake.statusbar.advanced": {
-    "debug" : {
-      "visibility": "hidden"
-              },
-    "launch" : {
-      "visibility": "hidden"
-               },
-    "build" : {
-      "visibility": "hidden"
-               },
-    "buildTarget" : {
-      "visibility": "hidden"
-               },
-     },
+    "files.associations": {
+        "stdlib.h": "c",
+        "freertosconfig.h": "c",
+        "assert.h": "c",
+        "task.h": "c"
+    }
 }
