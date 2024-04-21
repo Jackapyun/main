@@ -11,7 +11,7 @@
 #define configUSE_TIME_SLICING                      1
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION     0
 #define configUSE_TICKLESS_IDLE                     0
-#define configMAX_PRIORITIES                        5            
+#define configMAX_PRIORITIES                        32           
 #define configMINIMAL_STACK_SIZE                    128
 #define configMAX_TASK_NAME_LEN                     16
 #define configTICK_TYPE_WIDTH_IN_BITS               TICK_TYPE_WIDTH_32_BITS
@@ -42,19 +42,6 @@
 #define configENABLE_HEAP_PROTECTOR                 0
 
 /* Interrupt nesting behaviour configuration. *********************************/
-#ifdef __NVIC_PRIO_BITS
-    #define configPRIO_BITS __NVIC_PRIO_BITS
-#else
-    #define configPRIO_BITS 4
-#endif
-/* 中断最低优先级 */
-#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY         15  
-/* FreeRTOS可管理的最高中断优先级 */                
-#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY    5        
-#define configKERNEL_INTERRUPT_PRIORITY             ( configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS) )
-#define configMAX_SYSCALL_INTERRUPT_PRIORITY        ( configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS)
-#define configMAX_API_CALL_INTERRUPT_PRIORITY       configMAX_SYSCALL_INTERRUPT_PRIORITY
-
 /* Use Pico SDK ISR handlers */
 #define vPortSVCHandler                             isr_svcall
 #define xPortPendSVHandler                          isr_pendsv
@@ -86,7 +73,7 @@
 #define configNUMBER_OF_CORES                       2
 #define configRUN_MULTIPLE_PRIORITIES               1
 #define configUSE_CORE_AFFINITY                     1
-#define configUSE_TASK_PREEMPTION_DISABLE           0
+#define configUSE_TASK_PREEMPTION_DISABLE           1
 #define configUSE_PASSIVE_IDLE_HOOK                 0
 #define configTIMER_SERVICE_TASK_CORE_AFFINITY      tskNO_AFFINITY
 
