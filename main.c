@@ -1,49 +1,16 @@
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/clocks.h"
+#include "hardware/spi.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 
-void task0(void *param)
-{
-    static uint32_t cnt = 0;
-    while (1) {
-        taskENTER_CRITICAL();
-        printf("%s cnt: %d\n", __FUNCTION__, cnt ++);
-        printf("task %s is runing in core %d\r\n", __FUNCTION__, portGET_CORE_ID());
-        taskEXIT_CRITICAL();
-        vTaskDelay(1000);
-    }
-}
-
-void task1(void *param)
-{
-    static uint32_t cnt = 0;
-    while (1) {
-        taskENTER_CRITICAL();
-        printf("%s cnt: %d\n", __FUNCTION__, cnt ++);
-        printf("task %s is runing in core %d\r\n", __FUNCTION__, portGET_CORE_ID());
-        taskEXIT_CRITICAL();
-        vTaskDelay(1000);
-    }
-}
-
-void task2(void *para){
-    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    while (1)
-    {
-        gpio_put(LED_PIN,1);
-        taskENTER_CRITICAL();
-        printf("task %s is runing in core %d\r\n", __FUNCTION__, portGET_CORE_ID());
-        taskEXIT_CRITICAL();
-        vTaskDelay(200);
-        gpio_put(LED_PIN,0);
-        taskENTER_CRITICAL();
-        printf("task %s is runing in core %d\r\n", __FUNCTION__, portGET_CORE_ID());
-        taskEXIT_CRITICAL();
-        vTaskDelay(500);
-    }
-}
+#include "led.h"
+#include "btimer.h"
+#include "ps2.h"
+#include "lcd.h"
+#include "st7789.h"
 
 int main()
 {
@@ -64,24 +31,20 @@ int main()
     printf("system init finish!\r\n");
 
     //LED initialization
-    const uint LED_PIN = PICO_DEFAULT_LED_PIN;
-    gpio_init(LED_PIN);
-    gpio_set_dir(LED_PIN, GPIO_OUT);
+    led_init();
+    // basic timer initialization
+    basic_timer_init(500);
+    // lcd spi initialization
+    lcd_init();
+    // ps2 pressing and shanking initialization
+    ps2_init();
 
-    TaskHandle_t task0_Handle = NULL;
-    xTaskCreate(task0, "task0", configMINIMAL_STACK_SIZE*4, NULL, tskIDLE_PRIORITY + 1, &task0_Handle);
-    // UBaseType_t task0_CoreAffinityMask = (1 << 0);
-    // vTaskCoreAffinitySet(task0_Handle, task0_CoreAffinityMask); 
-
-    TaskHandle_t task1_Handle = NULL;
-    xTaskCreate(task1, "task1", configMINIMAL_STACK_SIZE*4, NULL, tskIDLE_PRIORITY + 2, &task1_Handle);
-    // UBaseType_t task1_CoreAffinityMask = (1 << 1);
-    // vTaskCoreAffinitySet(task1_Handle, task1_CoreAffinityMask); 
-
-    TaskHandle_t task2_Handle = NULL;
-    xTaskCreate(task2, "task2", configMINIMAL_STACK_SIZE*4, NULL, tskIDLE_PRIORITY + 6, &task2_Handle);
-
-    vTaskStartScheduler();
+    while(1){
+        st7789_fill(0xffff);
+        sleep_ms(1000);
+        st7789_fill(0x0000);
+        sleep_ms(1000);
+    }
 
     return 0;
 }

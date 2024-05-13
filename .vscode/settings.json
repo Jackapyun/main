@@ -3,6 +3,12 @@
         "stdlib.h": "c",
         "freertosconfig.h": "c",
         "assert.h": "c",
-        "task.h": "c"
+        "task.h": "c",
+        "clocks.h": "c",
+        "led.h": "c",
+        "btimer.h": "c",
+        "gpio.h": "c",
+        "freertos.h": "c",
+        "spi.h": "c"
     }
 }

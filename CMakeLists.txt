@@ -42,9 +42,12 @@ add_subdirectory(${FREERTOS_KERNEL_PATH} FreeRTOS-Kernel)
 # Add any user requested libraries
 target_link_libraries(${PROJECT_NAME} 
         pico_stdlib
+        hardware_spi
         pico_multicore
         freertos_kernel 
         freertos_config)
 
 pico_add_extra_outputs(main)
 
+add_subdirectory(BSP)
+target_link_libraries(${PROJECT_NAME} BSP)
